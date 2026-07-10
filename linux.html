@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>SERBA-SERBI BELAJAR KODING</h1>
+        <nav>
+            <a href="index.html">Beranda</a>
+            <a href="./tautan.html" target="_blank">Daftar Tautan</a>
+            <a href="linux.html">Serba-serbi linux</a>
+            <a href="vs_shortcut.html">Shortcut for Visual Studio</a>
+            <a href="best-practices.html">Best Practices</a>
+        </nav>
+    </header>
+    
+    <h1>SERBA-SERBI LINUX</h1>
+
+    <h2>Cara Mount Drive Secara Otomatis</h2>
+    <h3>1. Check system mount directory</h3>
+    <pre><code>cd /mnt/</code></pre>
+
+    <h3>2. Locate Unknown Drive Path</h3>
+    <pre><code>lsblk</code></pre>
+
+    <h3>3. Create Mount Folder</h3>
+    <pre><code>sudo mkdir /mnt/mydrive</code></pre>
+    <p><strong>mydrive</strong> bisa diganti dengan nama lain</p>
+
+    <h3>4. Cari tahu UUID partisi</h3>
+    <pre><code>sudo blkid /dev/sda1</code></pre>
+    <p>Ganti <strong>/dev/sda1</strong> dengan partisi yang diinginkan. Catat UUID dan tipe (ntfs, etc)</p>
+
+    <h3>Cadangkan konfigurasi penting</h3>
+    <pre><code>sudo cp /etc/fstab /ets/fstab.bak</code></pre>
+
+    <h3>Edit file fstab</h3>
+    <code>sudo nano /etc/fstab</code>
+    <p>Tambahkan di paling bawah baris berikut:</p>
+    <pre><code>UUID=D86094D86094BEA6    /mnt/mydrive    ntfs-3g    defaults,windows_names,uid=1000,gid=1000    0    2</code></pre>
+    
+    <h4>Arti kode </h4>
+    <ul>
+        <li>ntfs-3g: Ini adalah driver terbaik di Ubuntu agar Anda bisa membaca (read) sekaligus menulis/mengedit (write) file di dalam drive NTFS milik Windows tersebut.</li>
+        <li>uid=1000,gid=1000: Ini memastikan bahwa akun Ubuntu Anda memiliki hak penuh untuk membuat, menghapus, atau mengedit file di drive tersebut tanpa perlu mengetik sudo terus-menerus.</li>
+        <li>windows_names: Mencegah Anda membuat file dengan karakter yang dilarang oleh Windows (seperti tanda tanya ? atau titik dua :), sehingga drive tetap aman jika nanti dibuka lagi di Windows.</li>
+        <li>Ganti UUID dan /mnt/drive sesuai dengan yang diinginkan</li>
+    </ul>
+
+    <code>sudo mount -a</code>
+    <p>Kalau tidak ada error berarti aman. Bila muncul:</p>
+    <pre><code>tfs-3g-mount: failed to access mountpoint /mnt/mydrive: No such file or directory
+mount: (hint) your fstab has been modified, but systemd still uses
+       the old version; use 'systemctl daemon-reload' to reload.</code></pre>
+
+       buat ulang folder mountpoint <code>sudo mkdir -p /mnt/drive</code>
+
+       segarkan sistem ubuntu <code>sudo systemctl daemon-reload</code>
+       jalankan kembali <code>sudo mount -a</code>
+
+
+<h2>Mitigasi</h2>
+<p>Kalau error, buka kembali <code>sudo nano /etc/fstab</code> atau kembalikan file asli dengan <code>sudo cp /etc/fstab.bak /etc/fstab</code></p>
+
+</body>
+</html>
